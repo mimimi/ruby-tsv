@@ -2,19 +2,21 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe TSV do
   describe "#parse" do
+    subject { lambda { TSV.parse(filename) } }
+
     context "when file is not found" do
-      subject { TSV.parse("AManThatWasntThere.tsv") }
+      let(:filename) { "AManThatWasntThere.tsv" }
 
       it "returns FileNotFoundException" do
-        expect(subject).to raise_error(FileNotFoundException)
+        expect(subject).to raise_error(Errno::ENOENT)
       end
     end
 
-    context "when filename is nil" do
-      subject { TSV.parse(nil) }
+    context "when filename is invalid" do
+      let(:filename) { nil }
 
       it "returns FileNameInvalidException" do
-        expect(subject).to raise_error(FileNameInvalidException)
+        expect(subject).to raise_error(TSV::FileNameInvalidException)
       end
     end
   end

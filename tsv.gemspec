@@ -5,7 +5,7 @@ require 'tsv/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "tsv"
-  spec.version       = Tsv::VERSION
+  spec.version       = TSV::VERSION
   spec.authors       = ["Dmytro Soltys", "Alexander Rozumiy"]
   spec.email         = ["soap@slotos.net", "brain-geek@yandex.ua"]
   spec.description   = %q{Streamed TSV parser}
