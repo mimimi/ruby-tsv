@@ -1,6 +1,9 @@
 # Tsv
+[![Build Status](https://travis-ci.org/mimimi/ruby-tsv.svg?branch=master)](https://travis-ci.org/mimimi/ruby-tsv)
 
-TODO: Write a gem description
+A simple TSV parser, developed with aim of parsing a ~200Gb TSV dump. As such, no mode of operation, but enumerable is considered sane. Feel free to use `#to_a` on your supercomputer :)
+
+Does not (yet) provide TSV writing mechanism. Pull requests are welcome :)
 
 ## Installation
 
@@ -18,7 +21,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### High level interfaces
+
+#### TSV::parse
+
+`TSV.parse` accepts TSV as a whole string, returning lazy enumerator, yielding TSV::Row objects on demand
+
+#### TSV::parse_file
+
+`TSV.parse_file` accepts path to TSV file, returning lazy enumerator, yielding TSV::Row objects on demand
+`TSV.parse_file` is also aliased as `[]`, allowing for `TSV[filename]` syntax
+
+#### TSV::Row
+
+By default TSV::Row behaves like an Array of strings, derived from TSV row. Every row contains header data, accessible via `#header` reader.
+
+In case a hash-like behaviour is required, field can be accessed with string key. Alternatively, `#with_header` and `#to_h` return hash representation for the row.
 
 ## Contributing
 
