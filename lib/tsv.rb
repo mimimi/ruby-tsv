@@ -1,4 +1,5 @@
 require "tsv/version"
+require 'active_support/core_ext/hash'
 
 module TSV
   extend self
@@ -6,15 +7,23 @@ module TSV
   def parse(filepath, opts = {})
     raise FileNameInvalidException if filepath.nil?
 
-    res = []
+    get_header = opts.with_indifferent_access.fetch(:header, true)
 
     open(filepath, 'r') do |f|
-      f.each_line do |line|
-        res.push line.chomp.split("\t")
+      if get_header
+        header = (f.gets || "").chomp.split("\t")
+
+        f.each_line.map do |line|
+          intermediate = line.chomp.split("\t").each_with_index.map do |val, i|
+            [header[i], val]
+          end
+
+          Hash[intermediate]
+        end
+      else
+        f.each_line.map { |line| line.chomp.split("\t") }
       end
     end
-
-    res
   end
 
   class FileNameInvalidException < IOError
