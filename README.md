@@ -1,4 +1,5 @@
 # Tsv
+[![Build Status](https://travis-ci.org/mimimi/ruby-tsv.svg?branch=master)](https://travis-ci.org/mimimi/ruby-tsv)
 
 TODO: Write a gem description
 
