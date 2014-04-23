@@ -1,5 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
-puts File.join(File.dirname(__FILE__), '..', 'fixtures', 'example.tsv')
+
 describe TSV do
   describe "#parse" do
     let(:header) { nil }

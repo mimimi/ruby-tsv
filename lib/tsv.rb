@@ -1,4 +1,5 @@
 require "tsv/version"
+require "tsv/row"
 require 'active_support/core_ext/hash'
 
 module TSV
@@ -27,5 +28,8 @@ module TSV
   end
 
   class FileNameInvalidException < IOError
+  end
+
+  class ReadOnly < StandardError
   end
 end
