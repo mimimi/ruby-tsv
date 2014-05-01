@@ -1,5 +1,9 @@
 module TSV
   class Row
+    extend Forwardable
+
+    def_delegators :data, *Enumerable.instance_methods
+
     attr_accessor :header, :data
 
     def []=(key, value)
@@ -25,6 +29,10 @@ module TSV
       @header = header || (0...data.length).to_a.map(&:to_s)
 
       raise InputError if @data.length != @header.length
+    end
+
+    def with_header
+      Hash[header.zip(data)]
     end
 
     class InvalidKey < StandardError

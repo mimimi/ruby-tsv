@@ -28,7 +28,7 @@ describe TSV::Row do
 
   let(:header)  { ['first', 'second', 'third'] }
   let(:data)    { ['one',   'two',    'three'] }
-  
+
   subject(:row) { TSV::Row.new(data, header) }
 
   describe "#[]" do
@@ -92,6 +92,27 @@ describe TSV::Row do
       it "sets and gets value" do
         subject.header = test_data
         expect(subject.header).to eq test_data
+      end
+    end
+  end
+
+  describe "iterators" do
+    context "Enumerable #methods" do
+      Enumerable.instance_methods.each do |name|
+        it "delegates #{name} to data array" do
+          expect(subject.data).to receive(name)
+          subject.send(name)
+        end
+      end
+    end
+
+    context "#with_header" do
+      it "gathers header and data into hash" do
+        expect(subject.with_header).to eq({
+          "first"  => "one",
+          "second" => "two",
+          "third"  => "three"
+        })
       end
     end
   end
