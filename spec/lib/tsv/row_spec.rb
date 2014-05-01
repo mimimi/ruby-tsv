@@ -97,7 +97,7 @@ describe TSV::Row do
   end
 
   describe "iterators" do
-    context "Enumerable #methods" do
+    describe "Enumerable #methods" do
       Enumerable.instance_methods.each do |name|
         it "delegates #{name} to data array" do
           expect(subject.data).to receive(name)
@@ -106,7 +106,7 @@ describe TSV::Row do
       end
     end
 
-    context "#with_header" do
+    describe "#with_header" do
       it "gathers header and data into hash" do
         expect(subject.with_header).to eq({
           "first"  => "one",
