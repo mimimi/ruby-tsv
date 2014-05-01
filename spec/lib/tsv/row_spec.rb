@@ -76,22 +76,20 @@ describe TSV::Row do
     end
   end
 
-  describe "accessors" do
+  describe "readers" do
     describe "header" do
-      let(:test_data) { ['a', 'b', 'c'] }
+      it { should_not respond_to(:"header=") }
 
-      it "sets and gets value" do
-        subject.header = test_data
-        expect(subject.header).to eq test_data
+      it "has getter" do
+        expect(subject.header).to eq ['first', 'second', 'third']
       end
     end
 
     describe "data" do
-      let(:test_data) { [['a', 'b', 'c'], ['qwe', 'dsa', 'tre']] }
+      it { should_not respond_to(:"header=") }
 
-      it "sets and gets value" do
-        subject.header = test_data
-        expect(subject.header).to eq test_data
+      it "has getter" do
+        expect(subject.data).to eq ['one',   'two',    'three']
       end
     end
   end
@@ -107,13 +105,51 @@ describe TSV::Row do
     end
 
     describe "#with_header" do
+      subject { row.with_header }
+
       it "gathers header and data into hash" do
-        expect(subject.with_header).to eq({
+        expect(subject).to eq({
           "first"  => "one",
           "second" => "two",
           "third"  => "three"
         })
       end
+    end
+  end
+
+  describe "#==" do
+    let(:other_header) { header }
+    let(:other_data)   { data }
+
+    let(:other_row) { TSV::Row.new(other_data, other_header) }
+    subject { row == other_row }
+
+    context "when compared to TSV::Row" do
+      context "when both objects' data and header are equal" do
+        it { should be_true }
+      end
+
+      context "when data attributes are not equal" do
+        let(:other_data) { data.reverse }
+        it { should be_false }
+      end
+
+      context "when header attributes are not equal" do
+        let(:other_header) { header.reverse }
+        it { should be_false }
+      end
+
+      context "when both objects' data and header are not equal" do
+        let(:other_data) { data.reverse }
+        let(:other_header) { header.reverse }
+        it { should be_false }
+      end
+    end
+
+    context "when compared to something else than TSV::Row" do
+      let(:other_row) { data }
+
+      it { should be_false }
     end
   end
 end

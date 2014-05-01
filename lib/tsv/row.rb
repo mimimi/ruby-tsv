@@ -4,7 +4,7 @@ module TSV
 
     def_delegators :data, *Enumerable.instance_methods
 
-    attr_accessor :header, :data
+    attr_reader :header, :data
 
     def []=(key, value)
       raise TSV::ReadOnly.new('TSV data is read only. Export data to modify it.')
@@ -33,6 +33,12 @@ module TSV
 
     def with_header
       Hash[header.zip(data)]
+    end
+
+    def ==(other)
+      other.is_a?(self.class) and
+        header == other.header and
+        data == other.data
     end
 
     class InvalidKey < StandardError
