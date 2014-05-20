@@ -1,5 +1,6 @@
 require "tsv/version"
 require "tsv/row"
+require "tsv/cyclist"
 require 'active_support/core_ext/hash'
 
 module TSV
@@ -17,6 +18,10 @@ module TSV
         TSV::Row.new line.chomp.split("\t"), header
       end
     end
+  end
+
+  def [](filename)
+    TSV::Cyclist.new(filename)
   end
 
   class FileNameInvalidException < IOError

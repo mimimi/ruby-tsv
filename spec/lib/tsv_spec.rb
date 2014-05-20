@@ -85,6 +85,14 @@ describe TSV do
   end
 
   describe "#[]" do
-    it "returns enumerator"
+    let(:tsv_path) { File.join(File.dirname(__FILE__), '..', 'fixtures', filename) }
+    let(:filename) { 'example.tsv' }
+
+    subject { TSV[tsv_path] }
+
+    it "returns Cyclist object with given filepath" do
+      subject.should be_a(TSV::Cyclist)
+      subject.filepath.should == tsv_path
+    end
   end
 end
