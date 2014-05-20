@@ -7,17 +7,7 @@ module TSV
   extend self
 
   def parse(filepath, opts = {})
-    raise FileNameInvalidException if filepath.nil?
-
-    get_header = opts.with_indifferent_access.fetch(:header, true)
-
-    open(filepath, 'r') do |f|
-      header = get_header ?  (f.gets || "").chomp.split("\t") : nil
-
-      f.each_line.map do |line|
-        TSV::Row.new line.chomp.split("\t"), header
-      end
-    end
+    TSV::Cyclist.new(filepath, opts).to_a
   end
 
   def [](filename)
