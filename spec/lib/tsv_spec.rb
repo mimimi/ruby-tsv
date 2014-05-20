@@ -52,10 +52,10 @@ describe TSV do
           let(:header) { false }
 
           it "returns its content as array of arrays" do
-            expect(subject).to eq [ ['first', 'second', 'third'],
-                                    ['0', '1', '2'],
-                                    ['one', 'two', 'three'],
-                                    ['weird data', 's@mthin#', 'else']]
+            expect(subject).to eq [ TSV::Row.new( ['first', 'second', 'third'] ),
+                                    TSV::Row.new( ['0', '1', '2'] ),
+                                    TSV::Row.new( ['one', 'two', 'three'] ),
+                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'] ) ]
           end
         end
 
@@ -63,11 +63,10 @@ describe TSV do
           let(:header) { true }
 
           it "returns its content as array of hashes" do
-            expect(subject).to eq [ 
-                                    {'first' => '0',  'second' => '1', 'third' => '2'},
-                                    {'first' => 'one',  'second' => 'two', 'third' => 'three'},
-                                    {'first' => 'weird data', 'second' => 's@mthin#', 'third' => 'else'}
-                                  ]
+            headers = %w{first second third}
+            expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                    TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
           end
         end
 
@@ -75,11 +74,10 @@ describe TSV do
           let(:parameters) { Hash.new }
 
           it "returns its content as array of hashes" do
-            expect(subject).to eq [ 
-                                    {'first' => '0',  'second' => '1', 'third' => '2'},
-                                    {'first' => 'one',  'second' => 'two', 'third' => 'three'},
-                                    {'first' => 'weird data', 'second' => 's@mthin#', 'third' => 'else'}
-                                  ]
+            headers = %w{first second third}
+            expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                    TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
           end
         end
       end
