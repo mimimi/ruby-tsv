@@ -34,17 +34,13 @@ describe TSV do
       context "when requested without header" do
         let(:header) { true }
 
-        it "returns empty array" do
-          expect(subject).to be_empty
-        end
+        it { expect(subject).to be_empty }
       end
 
       context "when requested with header" do
         let(:header) { false }
 
-        it "returns empty array" do
-          expect(subject).to be_empty
-        end
+        it { expect(subject).to be_empty }
       end
     end
 
