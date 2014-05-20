@@ -13,11 +13,9 @@ describe TSV::Cyclist do
     it "works as a fucking enumerator" do
       headers = %w{first second third}
 
-      subject.next.should == TSV::Row.new( ['0', '1', '2'], headers )
-      subject.next.should == TSV::Row.new( ['one', 'two', 'three'], headers )
-      subject.next.should == TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers )
-
-      subject.next.should be_nil
+      expect(subject.take(10)).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                       TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                       TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
     end
   end
 end

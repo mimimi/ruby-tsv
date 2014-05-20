@@ -91,8 +91,8 @@ describe TSV do
     subject { TSV[tsv_path] }
 
     it "returns Cyclist object with given filepath" do
-      subject.should be_a(TSV::Cyclist)
-      subject.filepath.should == tsv_path
+      expect(subject).to be_a TSV::Cyclist
+      expect(subject.filepath).to eq tsv_path
     end
   end
 end
