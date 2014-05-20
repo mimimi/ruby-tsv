@@ -81,9 +81,10 @@ describe TSV do
           end
         end
       end
-
-      context "when block is passed" do
-      end
     end
+  end
+
+  describe "#[]" do
+    it "returns enumerator"
   end
 end
