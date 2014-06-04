@@ -1,7 +1,9 @@
 # Tsv
 [![Build Status](https://travis-ci.org/mimimi/ruby-tsv.svg?branch=master)](https://travis-ci.org/mimimi/ruby-tsv)
 
-TODO: Write a gem description
+A simple TSV parser, developed with aim of parsing a ~200Gb TSV dump.
+
+Does not (yet) provide TSV writing mechanism.
 
 ## Installation
 
