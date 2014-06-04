@@ -2,7 +2,7 @@ module TSV
   class Row
     extend Forwardable
 
-    def_delegators :data, *Enumerable.instance_methods
+    def_delegators :data, *Enumerable.instance_methods(false)
 
     attr_reader :header, :data
 
@@ -24,9 +24,9 @@ module TSV
       end
     end
 
-    def initialize(data, header = nil)
+    def initialize(data, header)
       @data = data
-      @header = header || (0...data.length).to_a.map(&:to_s)
+      @header = header
 
       raise InputError if @data.length != @header.length
     end

@@ -3,76 +3,33 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 describe TSV do
   describe "#parse" do
     let(:header) { nil }
-    let(:tsv_path) { File.join(File.dirname(__FILE__), '..', 'fixtures', filename) }
+    let(:content) { IO.read(File.dirname(__FILE__), '..', 'fixtures', filename) }
     let(:parameters) { { header: header } }
 
-    subject { TSV.parse(tsv_path, parameters) }
+    subject { TSV.parse(content, parameters) }
 
-    context "when file is empty" do
-      let(:filename) { 'empty.tsv' }
-
-      context "when requested without header" do
-        let(:header) { true }
-
-        it { expect(subject).to be_empty }
-      end
-
-      context "when requested with header" do
-        let(:header) { false }
-
-        it { expect(subject).to be_empty }
-      end
-    end
-
-    context "when file is valid" do
-      let(:filename) { 'example.tsv' }
-
-      context "when no block is passed" do
-        context "when requested without header" do
-          let(:header) { false }
-
-          it "returns its content as array of arrays" do
-            expect(subject).to eq [ TSV::Row.new( ['first', 'second', 'third'] ),
-                                    TSV::Row.new( ['0', '1', '2'] ),
-                                    TSV::Row.new( ['one', 'two', 'three'] ),
-                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'] ) ]
-          end
-        end
-
-        context "when requested with header" do
-          let(:header) { true }
-
-          it "returns its content as array of hashes" do
-            headers = %w{first second third}
-            expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
-                                    TSV::Row.new( ['one', 'two', 'three'], headers ),
-                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
-          end
-        end
-
-        context "when requested without specifying header option" do
-          let(:parameters) { Hash.new }
-
-          it "returns its content as array of hashes" do
-            headers = %w{first second third}
-            expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
-                                    TSV::Row.new( ['one', 'two', 'three'], headers ),
-                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
-          end
-        end
-      end
-    end
+    it "returns String Cyclist initialized with given data"
   end
 
-  describe "#[]" do
+  describe "#parse_file" do
     let(:tsv_path) { File.join(File.dirname(__FILE__), '..', 'fixtures', filename) }
     let(:filename) { 'example.tsv' }
 
-    subject { TSV[tsv_path] }
+    subject { TSV.parse_file tsv_path }
 
-    it "returns Cyclist object with given filepath" do
+    it "returns Cyclist object initialized with given filepath" do
       expect(subject).to be_a TSV::Cyclist
       expect(subject.filepath).to eq tsv_path
+    end
+
+    context "when block is given" do
+      let(:block) { lambda { } }
+
+      it "passes block to Cyclist" do
+        TSV::Cyclist.should_receive(:new).with(tsv_path, {}, &block)
+
+        TSV.parse_file(tsv_path, &block)
+      end
     end
   end
 end

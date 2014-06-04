@@ -5,14 +5,12 @@ require 'active_support/core_ext/hash'
 
 module TSV
   extend self
-
-  def parse(filepath, opts = {})
-    TSV::Cyclist.new(filepath, opts).to_a
+  
+  def parse_file(filename, opts = {}, &block)
+    TSV::Cyclist.new(filename, opts, &block)
   end
 
-  def [](filename)
-    TSV::Cyclist.new(filename)
-  end
+  alias :[] :parse_file
 
   class ReadOnly < StandardError
   end

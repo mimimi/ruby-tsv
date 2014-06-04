@@ -9,15 +9,6 @@ describe TSV::Row do
       expect(t.data).to eq(['data'])
     end
 
-    context "when no header is provided" do
-      it "generates default header in format of 0..data.length stringified" do
-        t = TSV::Row.new(['data', 'data'])
-
-        expect(t.header).to eq(['0', '1'])
-        expect(t.data).to eq(['data', 'data'])
-      end
-    end
-
     context "when header and data length do not match" do
       it "raises TSV::Row::InputError" do
         expect { TSV::Row.new(['data'], ['header', 'footer']) }.to raise_error(TSV::Row::InputError)
@@ -96,7 +87,7 @@ describe TSV::Row do
 
   describe "iterators" do
     describe "Enumerable #methods" do
-      Enumerable.instance_methods.each do |name|
+      Enumerable.instance_methods(false).each do |name|
         it "delegates #{name} to data array" do
           expect(subject.data).to receive(name)
           subject.send(name)
