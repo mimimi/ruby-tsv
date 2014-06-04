@@ -21,6 +21,24 @@ module TSV
       self.class.new(self.source, header: false)
     end
 
+    def enumerator
+      @enumerator ||= ::Enumerator.new do |y|
+        lines = data_enumerator
+
+        first_line = begin
+          lines.next
+        rescue StopIteration => ex
+          ''
+        end
+
+        generate_header(y, first_line)
+
+        loop do
+          push_row_to y, lines.next
+        end
+      end
+    end
+
     protected
 
     def generate_row_from(str)
@@ -30,55 +48,32 @@ module TSV
     def generate_default_header_from(example_line)
       (0...example_line.length).to_a.map(&:to_s)
     end
+
+    def push_row_to(y, line)
+      y << TSV::Row.new(line.is_a?(Array) ? line : generate_row_from(line), @active_header)
+    end
+
+    def generate_header(y, first_line)
+      @active_header = first_line = generate_row_from(first_line)
+
+      !self.header and
+        first_line.any? and
+        @active_header = generate_default_header_from(first_line) and
+        push_row_to(y, first_line)
+    end
   end
 
   class FileCyclist < Cyclist
     alias :filepath :source
 
-    def enumerator
-      @enumerator ||= ::Enumerator.new do |y|
-        open(self.source, 'r') do |f|
-          first_line = generate_row_from(f.gets)
-
-          header = first_line
-
-          !self.header and
-            first_line.any? and
-            header = generate_default_header_from(first_line) and
-            y << TSV::Row.new(first_line, header)
-
-          loop do
-            line = f.gets
-            break if line.nil?
-
-            y << TSV::Row.new(generate_row_from(line), header)
-          end
-        end
-      end
+    def data_enumerator
+      File.new(self.source).each_line
     end
   end
 
   class StringCyclist < Cyclist
-    def enumerator
-      @enumerator ||= ::Enumerator.new do |y|
-        lines = source.split("\n")
-
-        first_line = generate_row_from lines.shift
-
-        header = first_line
-
-        !self.header and
-          first_line.any? and
-          header = generate_default_header_from(first_line) and
-          y << TSV::Row.new(first_line, header)
-
-        loop do
-          line = lines.shift
-          break if line.nil?
-
-          y << TSV::Row.new(generate_row_from(line), header)
-        end
-      end
+    def data_enumerator
+      source.each_line
     end
   end
 end
