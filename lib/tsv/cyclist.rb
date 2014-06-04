@@ -25,16 +25,21 @@ module TSV
       @enumerator ||= ::Enumerator.new do |y|
         lines = data_enumerator
 
-        first_line = begin
+        first_line = generate_row_from begin
           lines.next
         rescue StopIteration => ex
           ''
         end
 
-        generate_header(y, first_line)
+        local_header = if self.header
+          first_line
+        else
+          lines.rewind
+          generate_default_header_from first_line
+        end
 
         loop do
-          push_row_to y, lines.next
+          y << TSV::Row.new(generate_row_from(lines.next), local_header)
         end
       end
     end
@@ -47,19 +52,6 @@ module TSV
 
     def generate_default_header_from(example_line)
       (0...example_line.length).to_a.map(&:to_s)
-    end
-
-    def push_row_to(y, line)
-      y << TSV::Row.new(line.is_a?(Array) ? line : generate_row_from(line), @active_header)
-    end
-
-    def generate_header(y, first_line)
-      @active_header = first_line = generate_row_from(first_line)
-
-      !self.header and
-        first_line.any? and
-        @active_header = generate_default_header_from(first_line) and
-        push_row_to(y, first_line)
     end
   end
 
