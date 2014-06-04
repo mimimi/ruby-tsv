@@ -7,7 +7,7 @@ module TSV
   extend self
   
   def parse_file(filename, opts = {}, &block)
-    TSV::Cyclist.new(filename, opts, &block)
+    TSV::FileCyclist.new(filename, opts, &block)
   end
 
   alias :[] :parse_file

@@ -12,3 +12,5 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}

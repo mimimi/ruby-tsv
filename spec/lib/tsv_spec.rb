@@ -18,7 +18,7 @@ describe TSV do
     subject { TSV.parse_file tsv_path }
 
     it "returns Cyclist object initialized with given filepath" do
-      expect(subject).to be_a TSV::Cyclist
+      expect(subject).to be_a TSV::FileCyclist
       expect(subject.filepath).to eq tsv_path
     end
 
@@ -26,7 +26,7 @@ describe TSV do
       let(:block) { lambda { } }
 
       it "passes block to Cyclist" do
-        TSV::Cyclist.should_receive(:new).with(tsv_path, {}, &block)
+        TSV::FileCyclist.should_receive(:new).with(tsv_path, {}, &block)
 
         TSV.parse_file(tsv_path, &block)
       end
