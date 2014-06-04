@@ -17,5 +17,25 @@ describe TSV::Cyclist do
                                        TSV::Row.new( ['one', 'two', 'three'], headers ),
                                        TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
     end
+
+    describe "edge cases" do
+      subject { lambda { TSV::Cyclist.new(tsv_path).to_a } }
+
+      context "when file is not found" do
+        let(:tsv_path) { "AManThatWasntThere.tsv" }
+
+        it "returns FileNotFoundException" do
+          expect(subject).to raise_error(Errno::ENOENT)
+        end
+      end
+
+      context "when filename is invalid" do
+        let(:tsv_path) { nil }
+
+        it "returns FileNameInvalidException" do
+          expect(subject).to raise_error(TSV::FileNameInvalidException)
+        end
+      end
+    end
   end
 end

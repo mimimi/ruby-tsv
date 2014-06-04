@@ -8,26 +8,6 @@ describe TSV do
 
     subject { TSV.parse(tsv_path, parameters) }
 
-    describe "edge cases" do
-      subject { lambda { TSV.parse(tsv_path) } }
-
-      context "when file is not found" do
-        let(:tsv_path) { "AManThatWasntThere.tsv" }
-
-        it "returns FileNotFoundException" do
-          expect(subject).to raise_error(Errno::ENOENT)
-        end
-      end
-
-      context "when filename is invalid" do
-        let(:tsv_path) { nil }
-
-        it "returns FileNameInvalidException" do
-          expect(subject).to raise_error(TSV::FileNameInvalidException)
-        end
-      end
-    end
-
     context "when file is empty" do
       let(:filename) { 'empty.tsv' }
 
