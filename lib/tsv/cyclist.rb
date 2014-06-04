@@ -8,14 +8,12 @@ module TSV
     attr_accessor :filepath, :header, :params
 
     def initialize(filepath, params = {})
-      raise FileNameInvalidException if filepath.nil?
-
       self.params   = params
       self.header   = params.fetch(:header, true)
-      self.filepath = filepath
+      self.filepath = filepath.to_s
 
       @enumerator = ::Enumerator.new do |y|
-        open(filepath, 'r') do |f|
+        open(self.filepath, 'r') do |f|
           header = self.header ?  (f.gets || "").chomp.split("\t") : nil
 
           loop do

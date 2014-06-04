@@ -14,9 +14,6 @@ module TSV
     TSV::Cyclist.new(filename)
   end
 
-  class FileNameInvalidException < IOError
-  end
-
   class ReadOnly < StandardError
   end
 end

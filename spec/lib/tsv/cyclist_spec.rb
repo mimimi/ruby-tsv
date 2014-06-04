@@ -18,7 +18,7 @@ describe TSV::Cyclist do
                                        TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
     end
 
-    describe "edge cases" do
+    describe "reading unavailable files" do
       subject { lambda { TSV::Cyclist.new(tsv_path).to_a } }
 
       context "when file is not found" do
@@ -29,11 +29,11 @@ describe TSV::Cyclist do
         end
       end
 
-      context "when filename is invalid" do
+      context "when filename is nil" do
         let(:tsv_path) { nil }
 
         it "returns FileNameInvalidException" do
-          expect(subject).to raise_error(TSV::FileNameInvalidException)
+          expect(subject).to raise_error(Errno::ENOENT)
         end
       end
     end
