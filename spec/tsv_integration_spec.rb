@@ -37,42 +37,15 @@ describe TSV do
       let(:filename) { 'example.tsv' }
 
       context "when no block is passed" do
-        context "when requested without header" do
-          let(:header) { false }
-          let(:auto_header) { %w{0 1 2} }
+        let(:parameters) { Hash.new }
 
-          it "returns its content as array of arrays" do
-            expect(subject).to eq [ TSV::Row.new( ['first', 'second', 'third'], auto_header ),
-                                    TSV::Row.new( ['0', '1', '2'], auto_header ),
-                                    TSV::Row.new( ['one', 'two', 'three'], auto_header ),
-                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], auto_header ) ]
-          end
-        end
-
-        context "when requested with header" do
-          let(:header) { true }
-
-          it "returns its content as array of hashes" do
-            headers = %w{first second third}
-            expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
-                                    TSV::Row.new( ['one', 'two', 'three'], headers ),
-                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
-          end
-        end
-
-        context "when requested without specifying header option" do
-          let(:parameters) { Hash.new }
-
-          it "returns its content as array of hashes" do
-            headers = %w{first second third}
-            expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
-                                    TSV::Row.new( ['one', 'two', 'three'], headers ),
-                                    TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
-          end
+        it "returns its content as array of hashes" do
+          headers = %w{first second third}
+          expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                  TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                  TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
         end
       end
-
-      context "when block is passed"
     end
   end
 

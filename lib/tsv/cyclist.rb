@@ -20,6 +20,16 @@ module TSV
     def without_header
       self.class.new(self.source, header: false)
     end
+
+    protected
+
+    def generate_row_from(str)
+      str.to_s.chomp.split("\t")
+    end
+
+    def generate_default_header_from(example_line)
+      (0...example_line.length).to_a.map(&:to_s)
+    end
   end
 
   class FileCyclist < Cyclist
@@ -28,21 +38,45 @@ module TSV
     def enumerator
       @enumerator ||= ::Enumerator.new do |y|
         open(self.source, 'r') do |f|
-          first_line = (f.gets || "").chomp.split("\t")
+          first_line = generate_row_from(f.gets)
 
-          if !self.header && first_line.any?
-            header = (0...first_line.length).to_a.map(&:to_s)
+          header = first_line
+
+          !self.header and
+            first_line.any? and
+            header = generate_default_header_from(first_line) and
             y << TSV::Row.new(first_line, header)
-          else
-            header = first_line
-          end
 
           loop do
             line = f.gets
             break if line.nil?
 
-            y << TSV::Row.new(line.chomp.split("\t"), header)
+            y << TSV::Row.new(generate_row_from(line), header)
           end
+        end
+      end
+    end
+  end
+
+  class StringCyclist < Cyclist
+    def enumerator
+      @enumerator ||= ::Enumerator.new do |y|
+        lines = source.split("\n")
+
+        first_line = generate_row_from lines.shift
+
+        header = first_line
+
+        !self.header and
+          first_line.any? and
+          header = generate_default_header_from(first_line) and
+          y << TSV::Row.new(first_line, header)
+
+        loop do
+          line = lines.shift
+          break if line.nil?
+
+          y << TSV::Row.new(generate_row_from(line), header)
         end
       end
     end

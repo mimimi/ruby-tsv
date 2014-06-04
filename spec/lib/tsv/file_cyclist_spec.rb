@@ -1,20 +1,19 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 describe TSV::FileCyclist do
-  let(:subject_class) { TSV::FileCyclist }
-
   let(:tsv_path) { File.join(File.dirname(__FILE__), '..', '..', 'fixtures', filename) }
+  let(:source)   { tsv_path }
   let(:filename) { 'example.tsv' }
 
   let(:header) { true }
   let(:parameters) { { header: header } }
 
-  subject(:cyclist) { subject_class.new(tsv_path, parameters) }
+  subject(:cyclist) { TSV::FileCyclist.new(source, parameters) }
 
   it_behaves_like "Cyclist"
 
   describe "accessing unavailable files" do
-    subject { lambda { subject_class.new(tsv_path).to_a } }
+    subject { lambda { TSV::FileCyclist.new(tsv_path).to_a } }
 
     context "when file is not found" do
       let(:tsv_path) { "AManThatWasntThere.tsv" }

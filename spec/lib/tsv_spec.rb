@@ -1,19 +1,33 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe TSV do
+  let(:filename) { 'example.tsv' }
+
   describe "#parse" do
     let(:header) { nil }
-    let(:content) { IO.read(File.dirname(__FILE__), '..', 'fixtures', filename) }
+    let(:content) { IO.read(File.join(File.dirname(__FILE__), '..', 'fixtures', filename)) }
     let(:parameters) { { header: header } }
 
     subject { TSV.parse(content, parameters) }
 
-    it "returns String Cyclist initialized with given data"
+    it "returns String Cyclist initialized with given data" do
+      expect(subject).to be_a TSV::StringCyclist
+      expect(subject.source).to eq(content)
+    end
+
+    context "when block is given" do
+      let(:block) { lambda { } }
+
+      it "passes block to Cyclist" do
+        TSV::StringCyclist.should_receive(:new).with(content, {}, &block)
+
+        TSV.parse(content, &block)
+      end
+    end
   end
 
   describe "#parse_file" do
     let(:tsv_path) { File.join(File.dirname(__FILE__), '..', 'fixtures', filename) }
-    let(:filename) { 'example.tsv' }
 
     subject { TSV.parse_file tsv_path }
 

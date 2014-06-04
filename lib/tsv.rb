@@ -5,6 +5,10 @@ require 'active_support/core_ext/hash'
 
 module TSV
   extend self
+
+  def parse(content, opts = {}, &block)
+    TSV::StringCyclist.new(content, opts, &block)
+  end
   
   def parse_file(filename, opts = {}, &block)
     TSV::FileCyclist.new(filename, opts, &block)
