@@ -6,6 +6,9 @@ require 'rspec'
 
 require 'tsv'
 
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 # Disabling old rspec should syntax
 RSpec.configure do |config|
   config.expect_with :rspec do |c|

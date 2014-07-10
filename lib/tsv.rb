@@ -1,7 +1,6 @@
 require "tsv/version"
 require "tsv/row"
 require "tsv/cyclist"
-require 'active_support/core_ext/hash'
 
 module TSV
   extend self
