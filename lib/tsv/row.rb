@@ -34,6 +34,7 @@ module TSV
     def with_header
       Hash[header.zip(data)]
     end
+    alias :to_h :with_header
 
     def ==(other)
       other.is_a?(self.class) and

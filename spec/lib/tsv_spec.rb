@@ -16,12 +16,17 @@ describe TSV do
     end
 
     context "when block is given" do
-      let(:block) { lambda { } }
-
       it "passes block to Cyclist" do
-        TSV::StringCyclist.should_receive(:new).with(content, {}, &block)
+        data = []
+        
+        TSV.parse(content) do |i|
+          data.push i
+        end
 
-        TSV.parse(content, &block)
+        headers = %w{first second third}
+        expect(data).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
       end
     end
   end
@@ -37,12 +42,17 @@ describe TSV do
     end
 
     context "when block is given" do
-      let(:block) { lambda { } }
-
       it "passes block to Cyclist" do
-        TSV::FileCyclist.should_receive(:new).with(tsv_path, {}, &block)
+        data = []
 
-        TSV.parse_file(tsv_path, &block)
+        TSV.parse_file(tsv_path) do |i|
+          data.push i
+        end
+
+        headers = %w{first second third}
+        expect(data).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
       end
     end
   end

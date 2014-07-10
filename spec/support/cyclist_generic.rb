@@ -1,9 +1,7 @@
 shared_examples_for "Cyclist" do
-  let(:subject_class) { subject.class }
-
   describe "::new" do
     it "initializes header to true by default" do
-      expect(subject.header).to be_true
+      expect(subject.header).to be true
     end
 
     it "initializes source to given value" do
@@ -12,14 +10,16 @@ shared_examples_for "Cyclist" do
 
     context "when block is given" do
       it "passes block to enumerator through each" do
-        block = lambda {}
+        data = []
 
-        enumerator = double("enumerator")
-        enumerator.should_receive(:each).with(&block)
+        described_class.new(source) do |v|
+          data << v
+        end
 
-        Enumerator.should_receive(:new).and_return(enumerator)
-
-        subject_class.new(source, &block)
+        headers = %w{first second third}
+        expect(data).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                TSV::Row.new( ['one', 'two', 'three'], headers ),
+                                TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
       end
     end
   end
@@ -53,6 +53,13 @@ shared_examples_for "Cyclist" do
                                   TSV::Row.new( ['one', 'two', 'three'], auto_header ),
                                   TSV::Row.new( ['weird data', 's@mthin#', 'else'], auto_header ) ]
         end
+
+        it "freezes data and header for TSV::Row" do
+          subject.each do |i|
+            expect(i.data).to be_frozen
+            expect(i.header).to be_frozen
+          end
+        end
       end
 
       context "when requested with header" do
@@ -64,6 +71,13 @@ shared_examples_for "Cyclist" do
                                   TSV::Row.new( ['one', 'two', 'three'], headers ),
                                   TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
         end
+
+        it "freezes data and header for TSV::Row" do
+          subject.each do |i|
+            expect(i.data).to be_frozen
+            expect(i.header).to be_frozen
+          end
+        end
       end
     end
   end
@@ -72,7 +86,7 @@ shared_examples_for "Cyclist" do
     subject { cyclist.with_header }
     
     it "returns a Cyclist with header option set to true" do
-      expect(subject.header).to be_true
+      expect(subject.header).to be true
     end
   end
 
@@ -80,7 +94,7 @@ shared_examples_for "Cyclist" do
     subject { cyclist.without_header }
 
     it "returns a Cyclist with header option set to false" do
-      expect(subject.header).to be_false
+      expect(subject.header).to be false
     end
   end
 

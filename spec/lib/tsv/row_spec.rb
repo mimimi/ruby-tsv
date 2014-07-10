@@ -30,6 +30,12 @@ describe TSV::Row do
         end
       end
 
+      context "when provided with negative offset" do
+        it "returns requested element" do
+          expect(subject[-1]).to eq "three"
+        end
+      end
+
       context "when provided with header name" do
         it "returns requested element" do
           expect(subject['third']).to eq "three"
@@ -43,7 +49,7 @@ describe TSV::Row do
         end
       end
 
-      context "when provided with unknown string key" do
+      context "when provided with unknown numeric key" do
         let(:cases) { [-(data.length + 1), data.length, 500, -500]}
 
         it "raises TSV::Row::UnknownKey" do
@@ -53,7 +59,7 @@ describe TSV::Row do
         end
       end
 
-      context "when provided with unknown numeric key" do
+      context "when provided with unknown string key" do
         it "raises TSV::Row::UnknownKey" do
           expect { subject['something'] }.to raise_error(TSV::Row::UnknownKey)
         end
@@ -67,9 +73,11 @@ describe TSV::Row do
     end
   end
 
-  describe "readers" do
+  describe "accessors" do
     describe "header" do
-      it { should_not respond_to(:"header=") }
+      it "does not have setter" do 
+        expect(subject).to_not respond_to(:"header=")
+      end
 
       it "has getter" do
         expect(subject.header).to eq ['first', 'second', 'third']
@@ -77,7 +85,9 @@ describe TSV::Row do
     end
 
     describe "data" do
-      it { should_not respond_to(:"header=") }
+      it "does not have setter" do 
+        expect(subject).to_not respond_to(:"header=")
+      end
 
       it "has getter" do
         expect(subject.data).to eq ['one',   'two',    'three']
@@ -106,6 +116,18 @@ describe TSV::Row do
         })
       end
     end
+
+    describe "#to_h" do
+      subject { row.to_h }
+
+      it "gathers header and data into hash" do
+        expect(subject).to eq({
+          "first"  => "one",
+          "second" => "two",
+          "third"  => "three"
+        })
+      end
+    end
   end
 
   describe "#==" do
@@ -117,30 +139,30 @@ describe TSV::Row do
 
     context "when compared to TSV::Row" do
       context "when both objects' data and header are equal" do
-        it { should be_true }
+        it { should be true }
       end
 
       context "when data attributes are not equal" do
         let(:other_data) { data.reverse }
-        it { should be_false }
+        it { should be false }
       end
 
       context "when header attributes are not equal" do
         let(:other_header) { header.reverse }
-        it { should be_false }
+        it { should be false }
       end
 
       context "when both objects' data and header are not equal" do
         let(:other_data) { data.reverse }
         let(:other_header) { header.reverse }
-        it { should be_false }
+        it { should be false }
       end
     end
 
     context "when compared to something else than TSV::Row" do
       let(:other_row) { data }
 
-      it { should be_false }
+      it { should be false }
     end
   end
 end

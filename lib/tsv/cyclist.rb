@@ -39,7 +39,7 @@ module TSV
         end
 
         loop do
-          y << TSV::Row.new(generate_row_from(lines.next), local_header)
+          y << TSV::Row.new(generate_row_from(lines.next).freeze, local_header.freeze)
         end
       end
     end
