@@ -32,6 +32,10 @@ Or install it yourself as:
 `TSV.parse_file` accepts path to TSV file, returning lazy enumerator, yielding TSV::Row objects on demand
 `TSV.parse_file` is also aliased as `[]`, allowing for `TSV[filename]` syntax
 
+#### TSV::Cyclist
+
+While TSV specification requires headers, popular use doesn't necessarily adhere. In order to cope both `TSV::parse` and `TSV::parse_file` return Cyclist objects, that apart from acting as enumerators expose two additional methods: `#with_headers` and `#without_headers`.  Neither method preserves read position by design.
+
 #### TSV::Row
 
 By default TSV::Row behaves like an Array of strings, derived from TSV row. However this similarity is limited to Enumerable methods. In case a real array is needed, `#to_a` will behave as expected.
