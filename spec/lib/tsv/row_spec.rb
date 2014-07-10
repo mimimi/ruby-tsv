@@ -96,8 +96,8 @@ describe TSV::Row do
   end
 
   describe "iterators" do
-    describe "Enumerable #methods" do
-      Enumerable.instance_methods(false).each do |name|
+    describe "Enumerable #methods (except #to_h, which we have a better implementation for)" do
+      (Enumerable.instance_methods(false) - [:to_h]).each do |name|
         it "delegates #{name} to data array" do
           expect(subject.data).to receive(name)
           subject.send(name)
