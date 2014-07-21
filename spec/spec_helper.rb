@@ -1,13 +1,13 @@
 require 'rubygems'
 require 'bundler/setup'
 
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 require 'pry'
 require 'rspec'
 
 require 'tsv'
-
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
 
 # Disabling old rspec should syntax
 RSpec.configure do |config|
