@@ -12,6 +12,11 @@ rvm:
   - rbx-2.2.6
   - jruby
 
+# Part of test suite - building gem and trying to require it via ruby -e
+# This way we check if gem is loadable and works without any problems in vanilla ruby
+script: >
+  rake build&&gem install pkg/tsv*.gem&&ruby -e 'require "tsv"; TSV.parse_file("spec/fixtures/example.tsv").to_a'&&rake
+
 matrix:
   allow_failures: 
     - rvm: rbx-2.2.6
