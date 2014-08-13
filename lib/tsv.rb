@@ -1,3 +1,5 @@
+require 'forwardable'
+
 require "tsv/version"
 require "tsv/row"
 require "tsv/cyclist"
