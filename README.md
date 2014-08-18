@@ -1,5 +1,7 @@
 # Tsv
 [![Build Status](https://travis-ci.org/mimimi/ruby-tsv.svg?branch=master)](https://travis-ci.org/mimimi/ruby-tsv)
+[![Code Climate](https://codeclimate.com/github/mimimi/ruby-tsv/badges/gpa.svg)](https://codeclimate.com/github/mimimi/ruby-tsv)
+[![Test Coverage](https://codeclimate.com/github/mimimi/ruby-tsv/badges/coverage.svg)](https://codeclimate.com/github/mimimi/ruby-tsv)
 
 A simple TSV parser, developed with aim of parsing a ~200Gb TSV dump. As such, no mode of operation, but enumerable is considered sane. Feel free to use `#to_a` on your supercomputer :)
 
