@@ -47,6 +47,20 @@ describe TSV do
         end
       end
     end
+
+    context "when file includes empty trailing fields" do
+      let(:filename) { 'empty-trailing.tsv' }
+
+      context "when no block is passed" do
+        let(:parameters) { Hash.new }
+
+        it "returns its content as array of hashes" do
+          headers = %w{first second third}
+          expect(subject).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                                  TSV::Row.new( ['one', '', ''], headers ) ]
+        end
+      end
+    end
   end
 
   describe "reading from string" do

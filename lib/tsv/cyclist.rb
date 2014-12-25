@@ -47,7 +47,7 @@ module TSV
     protected
 
     def generate_row_from(str)
-      str.to_s.chomp.split("\t")
+      str.to_s.chomp.split("\t", -1)
     end
 
     def generate_default_header_from(example_line)
