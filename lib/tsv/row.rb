@@ -28,7 +28,7 @@ module TSV
       @data = data
       @header = header
 
-      raise InputError if @data.length != @header.length
+      raise InputError.new("Row has #{@data.length} columns, but #{@header.length} columns expected") if @data.length != @header.length
     end
 
     def with_header
