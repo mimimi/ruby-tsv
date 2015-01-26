@@ -5,21 +5,48 @@ describe TSV do
 
   describe "#parse" do
     let(:header) { nil }
-    let(:content) { IO.read(File.join(File.dirname(__FILE__), '..', 'fixtures', filename)) }
     let(:parameters) { { header: header } }
 
-    subject { TSV.parse(content, parameters) }
+    context "given a string with content" do
+      let(:content) { IO.read(File.join(File.dirname(__FILE__), '..', 'fixtures', filename)) }
 
-    it "returns String Cyclist initialized with given data" do
-      expect(subject).to be_a TSV::StringCyclist
-      expect(subject.source).to eq(content)
+      subject { TSV.parse(content, parameters) }
+
+      it "returns String Cyclist initialized with given data" do
+        expect(subject).to be_a TSV::StringCyclist
+        expect(subject.source).to eq(content)
+      end
+
+      context "when block is given" do
+        it "passes block to Cyclist" do
+          data = []
+
+          TSV.parse(content) do |i|
+            data.push i
+          end
+
+          headers = %w{first second third}
+          expect(data).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
+                               TSV::Row.new( ['one', 'two', 'three'], headers ),
+                               TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
+        end
+      end
     end
 
-    context "when block is given" do
-      it "passes block to Cyclist" do
+    context "given a opened IO object" do
+      let(:content) { File.open(File.join(File.dirname(__FILE__), '..', 'fixtures', filename), 'r') }
+
+      subject { TSV.parse(content, parameters) }
+
+      it "returns String Cyclist initialized with given data" do
+        expect(subject).to be_a TSV::StringCyclist
+        expect(subject.source).to eq(content)
+      end
+
+      it "can properly parse file" do
         data = []
-        
-        TSV.parse(content) do |i|
+
+        TSV.parse(content).each do |i|
           data.push i
         end
 

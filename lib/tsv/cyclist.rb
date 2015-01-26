@@ -9,7 +9,7 @@ module TSV
 
     def initialize(source, params = {}, &block)
       self.header   = params.fetch(:header, true)
-      self.source = source.to_s
+      self.source = source
       self.enumerator.each(&block) if block_given?
     end
 
@@ -59,7 +59,7 @@ module TSV
     alias :filepath :source
 
     def data_enumerator
-      File.new(self.source).each_line
+      File.new(self.source.to_s).each_line
     end
   end
 
