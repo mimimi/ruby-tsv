@@ -27,7 +27,12 @@ Or install it yourself as:
 
 #### TSV::parse
 
-`TSV.parse` accepts TSV as a whole string, returning lazy enumerator, yielding TSV::Row objects on demand
+`TSV.parse` accepts basically anything that can enumerate over lines, for example:
+
+* TSV as a whole string
+* any IO object - a TSV file pre-opened with `File.open`, `StringIO` buffer containing TSV data, etc
+
+It returns a lazy enumerator, yielding TSV::Row objects on demand.
 
 #### TSV::parse_file
 
