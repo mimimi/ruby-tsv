@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in tsv.gemspec
 gemspec
 
-gem "codeclimate-test-reporter", group: :test, require: nil
-gem "rake"
-gem "rspec"
-gem "pry"
+group "test" do
+  gem "codeclimate-test-reporter", require: nil
+  gem "rake"
+  gem "rspec", "~> 3.1.0"
+  gem "pry"
+end
