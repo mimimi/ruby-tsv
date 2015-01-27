@@ -59,7 +59,7 @@ module TSV
     alias :filepath :source
 
     def data_enumerator
-      File.new(self.source).each_line
+      File.new(self.source, 'r').each_line
     end
   end
 
