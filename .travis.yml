@@ -9,7 +9,8 @@ rvm:
   - 2.0.0
   - 2.1.1
   - 2.1.2
-  - rbx-2.2.6
+  - 2.2.0
+  - rbx-2.5.1
   - jruby
 
 # Part of test suite - building gem and trying to require it via ruby -e
@@ -18,6 +19,6 @@ script: >
   rake build&&gem install pkg/tsv*.gem&&ruby -e 'require "tsv"; TSV.parse_file("spec/fixtures/example.tsv").to_a'&&rake
 
 matrix:
-  allow_failures: 
-    - rvm: rbx-2.2.6
+  allow_failures:
+    - rvm: rbx-2.5.1
     - rvm: jruby
