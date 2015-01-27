@@ -8,7 +8,7 @@ module TSV
     attr_accessor :source, :header
 
     def initialize(source, params = {}, &block)
-      self.header   = params.fetch(:header, true)
+      self.header = params.fetch(:header, true)
       self.source = source
       self.enumerator.each(&block) if block_given?
     end
@@ -63,7 +63,7 @@ module TSV
     end
   end
 
-  class StringCyclist < Cyclist
+  class LineCyclist < Cyclist
     def data_enumerator
       source.each_line
     end

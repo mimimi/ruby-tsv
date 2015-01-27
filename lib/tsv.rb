@@ -8,9 +8,9 @@ module TSV
   extend self
 
   def parse(content, opts = {}, &block)
-    TSV::StringCyclist.new(content, opts, &block)
+    TSV::LineCyclist.new(content, opts, &block)
   end
-  
+
   def parse_file(filename, opts = {}, &block)
     TSV::FileCyclist.new(filename, opts, &block)
   end

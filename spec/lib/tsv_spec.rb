@@ -13,7 +13,7 @@ describe TSV do
       subject { TSV.parse(content, parameters) }
 
       it "returns String Cyclist initialized with given data" do
-        expect(subject).to be_a TSV::StringCyclist
+        expect(subject).to be_a TSV::LineCyclist
         expect(subject.source).to eq(content)
       end
 
@@ -39,7 +39,7 @@ describe TSV do
       subject { TSV.parse(content, parameters) }
 
       it "returns String Cyclist initialized with given data" do
-        expect(subject).to be_a TSV::StringCyclist
+        expect(subject).to be_a TSV::LineCyclist
         expect(subject.source).to eq(content)
       end
 
