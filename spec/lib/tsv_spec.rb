@@ -12,13 +12,13 @@ describe TSV do
 
       subject { TSV.parse(content, parameters) }
 
-      it "returns String Cyclist initialized with given data" do
-        expect(subject).to be_a TSV::StringCyclist
+      it "returns Table initialized with given data" do
+        expect(subject).to be_a TSV::Table
         expect(subject.source).to eq(content)
       end
 
       context "when block is given" do
-        it "passes block to Cyclist" do
+        it "passes block to Table" do
           data = []
 
           TSV.parse(content) do |i|
@@ -38,8 +38,8 @@ describe TSV do
 
       subject { TSV.parse(content, parameters) }
 
-      it "returns String Cyclist initialized with given data" do
-        expect(subject).to be_a TSV::StringCyclist
+      it "returns Table initialized with given data" do
+        expect(subject).to be_a TSV::Table
         expect(subject.source).to eq(content)
       end
 
@@ -52,8 +52,8 @@ describe TSV do
 
         headers = %w{first second third}
         expect(data).to eq [ TSV::Row.new( ['0', '1', '2'], headers ),
-                                TSV::Row.new( ['one', 'two', 'three'], headers ),
-                                TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
+                             TSV::Row.new( ['one', 'two', 'three'], headers ),
+                             TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
       end
     end
   end
@@ -63,13 +63,16 @@ describe TSV do
 
     subject { TSV.parse_file tsv_path }
 
-    it "returns Cyclist object initialized with given filepath" do
-      expect(subject).to be_a TSV::FileCyclist
-      expect(subject.filepath).to eq tsv_path
+    context "when no block is given" do
+      it "returns Table initialized with File object" do
+        expect(subject).to be_a TSV::Table
+        expect(subject.source).to be_kind_of(File)
+        expect(subject.source.path).to eq(tsv_path)
+      end
     end
 
     context "when block is given" do
-      it "passes block to Cyclist" do
+      it "passes block to Table" do
         data = []
 
         TSV.parse_file(tsv_path) do |i|
@@ -82,5 +85,27 @@ describe TSV do
                                 TSV::Row.new( ['weird data', 's@mthin#', 'else'], headers ) ]
       end
     end
+
+    context "when accessing unavailable files" do
+      subject { lambda { TSV.parse_file(tsv_path).to_a } }
+
+      context "when file is not found" do
+        let(:tsv_path) { "AManThatWasntThere.tsv" }
+
+        it "returns FileNotFoundException" do
+          expect(subject).to raise_error(Errno::ENOENT)
+        end
+      end
+    end
+
+    describe "intermediate file handle" do
+      it "raises IOError on write attempt" do
+        tempfile = Tempfile.new('tsv_test')
+        handle = TSV.parse_file(tempfile.path).source
+
+        expect{ handle.puts('test string please ignore') }.to raise_error(IOError, 'not opened for writing')
+      end
+    end
+
   end
 end

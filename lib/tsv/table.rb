@@ -1,5 +1,5 @@
 module TSV
-  class Cyclist
+  class Table
     extend Forwardable
 
     def_delegators :enumerator, *Enumerator.instance_methods(false)
@@ -8,7 +8,7 @@ module TSV
     attr_accessor :source, :header
 
     def initialize(source, params = {}, &block)
-      self.header   = params.fetch(:header, true)
+      self.header = params.fetch(:header, true)
       self.source = source
       self.enumerator.each(&block) if block_given?
     end
@@ -44,6 +44,10 @@ module TSV
       end
     end
 
+    def data_enumerator
+      source.each_line
+    end
+
     protected
 
     def generate_row_from(str)
@@ -52,20 +56,6 @@ module TSV
 
     def generate_default_header_from(example_line)
       (0...example_line.length).to_a.map(&:to_s)
-    end
-  end
-
-  class FileCyclist < Cyclist
-    alias :filepath :source
-
-    def data_enumerator
-      File.new(self.source.to_s).each_line
-    end
-  end
-
-  class StringCyclist < Cyclist
-    def data_enumerator
-      source.each_line
     end
   end
 end

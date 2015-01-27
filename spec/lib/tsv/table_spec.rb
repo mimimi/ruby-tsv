@@ -1,4 +1,14 @@
-shared_examples_for "Cyclist" do
+require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
+
+describe TSV::Table do
+  let(:source) { IO.read(File.join(File.dirname(__FILE__), '..', '..', 'fixtures', filename)) }
+  let(:filename) { 'example.tsv' }
+
+  let(:header) { true }
+  let(:parameters) { { header: header } }
+
+  subject(:table) { TSV::Table.new(source, parameters) }
+
   describe "::new" do
     it "initializes header to true by default" do
       expect(subject.header).to be true
@@ -25,8 +35,8 @@ shared_examples_for "Cyclist" do
   end
 
   describe "#enumerator" do
-    it { expect(cyclist.enumerator).to be_a_kind_of(Enumerator) }
-    subject { cyclist.enumerator.to_a }
+    it { expect(table.enumerator).to be_a_kind_of(Enumerator) }
+    subject { table.enumerator.to_a }
 
     context "string is empty" do
       let(:filename) { 'empty.tsv' }
@@ -83,17 +93,17 @@ shared_examples_for "Cyclist" do
   end
 
   describe "#with_header" do
-    subject { cyclist.with_header }
-    
-    it "returns a Cyclist with header option set to true" do
+    subject { table.with_header }
+
+    it "returns a Table with header option set to true" do
       expect(subject.header).to be true
     end
   end
 
   describe "#without_header" do
-    subject { cyclist.without_header }
+    subject { table.without_header }
 
-    it "returns a Cyclist with header option set to false" do
+    it "returns a Table with header option set to false" do
       expect(subject.header).to be false
     end
   end
@@ -101,8 +111,8 @@ shared_examples_for "Cyclist" do
   describe "enumerator interfaces" do
     ( Enumerable.instance_methods(false) + Enumerator.instance_methods(false) ).each do |name|
       it "delegates #{name} to enumerator" do
-        expect(cyclist.enumerator).to receive(name)
-        cyclist.send(name)
+        expect(table.enumerator).to receive(name)
+        table.send(name)
       end
     end
   end
