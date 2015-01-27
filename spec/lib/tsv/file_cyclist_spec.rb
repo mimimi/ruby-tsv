@@ -22,13 +22,5 @@ describe TSV::FileCyclist do
         expect(subject).to raise_error(Errno::ENOENT)
       end
     end
-
-    context "when filename is nil" do
-      let(:tsv_path) { nil }
-
-      it "returns FileNameInvalidException" do
-        expect(subject).to raise_error(Errno::ENOENT)
-      end
-    end
   end
 end
