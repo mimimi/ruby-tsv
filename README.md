@@ -39,9 +39,9 @@ It returns a lazy enumerator, yielding TSV::Row objects on demand.
 `TSV.parse_file` accepts path to TSV file, returning lazy enumerator, yielding TSV::Row objects on demand
 `TSV.parse_file` is also aliased as `[]`, allowing for `TSV[filename]` syntax
 
-#### TSV::Cyclist
+#### TSV::Table
 
-While TSV specification requires headers, popular use doesn't necessarily adhere. In order to cope both `TSV::parse` and `TSV::parse_file` return Cyclist objects, that apart from acting as enumerators expose two additional methods: `#with_headers` and `#without_headers`.  Neither method preserves read position by design.
+While TSV specification requires headers, popular use doesn't necessarily adhere. In order to cope both `TSV::parse` and `TSV::parse_file` return `TSV::Table` object, that apart from acting as enumerator exposes two additional methods: `#with_headers` and `#without_headers`.  Neither method preserves read position by design.
 
 #### TSV::Row
 
