@@ -5,10 +5,10 @@ addons:
     repo_token: 17abb3979e6abb0cee4069ec3e7aeee9c6e4fd8277b0899b4cd0900ac6030f98
 
 rvm:
-  - 2.0.0
-  - 2.1.2
-  - 2.2.0
-  - 2.3.0
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.3
   - rbx-2.5.1
   - jruby
 
